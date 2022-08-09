@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 
 //The main function
 int main()
