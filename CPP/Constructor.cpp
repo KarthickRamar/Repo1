@@ -2,11 +2,12 @@
 Brief  : Program for constructor, copy constructor and copy assignment operator
 Author : Karthick
 
-Compiled and verified using Programiz C++ online compiler
+Compiled and build using Visual Studio 2022 community
 ==============================================================================================================*/
 
 #include <iostream>
 #include <cstring>
+#include <string>
 
 using namespace std;
 
@@ -42,19 +43,21 @@ public:
 	//Similar ot copy constructor the argument should be constant reference
 	//Need not necessarily return the object.
 	//The beow syntax is particularly useful when copying multiple objects a = b = c;
-	Constructor& operator=(const Constructor& assgnConstr);
+	void operator=(const Constructor& assgnConstr);
 	
 	//Prints the members of the object
-	void PrintVal(int value, std::string str);
+	void PrintVal();
 	
 	//To set the value fo the members
-	void SetVal(int value, str::string str);
+	void SetVal(int value, std::string str);
 
 	//Destructor
 	~Constructor();
 };
 
+//==================================================================================================
 // D E F I N I T I O N
+//==================================================================================================
 Constructor::Constructor()
 {
 	cout << "Default constructor" << endl;
@@ -62,27 +65,32 @@ Constructor::Constructor()
     
 Constructor::Constructor(int val, std::string str)
 {
-	cout <<"Parameterized constructor"<<endl;
+	cout <<"Parameterized constructor : "<< this << endl;
 	m_intVal = val;
 	m_strVal = str;
 	m_pCharVal = new char[20];
-	strncpy(m_pCharVal, str.c_str(), MAX_SIZE);
+	strncpy_s(m_pCharVal, MAX_SIZE, str.c_str(), MAX_SIZE);
 }
     
 Constructor::Constructor(const Constructor& constr)
 {
+	cout << "Copy Constructor : " << endl;
 	m_intVal = constr.m_intVal;
 	m_strVal = constr.m_strVal;
-	m_pCharVal = constr.m_pCharVal;  //default copying behavior
+	//default copying behavior and this should cause the program to cause during object destruction.
+	//When the destructo is called the same memory location will be deleted twice which causes the crash
+	m_pCharVal = constr.m_pCharVal;
 }
     
 void Constructor::operator=(const Constructor& constr)
 {
-	cout << "Copy assignment operator" <<endl;
+	cout << "Copy assignment operator : " << endl;
 	m_intVal = constr.m_intVal;
 	m_strVal = constr.m_strVal;
-	m_pCharVal = new char[20];
-	strncpy(m_pCharVal, constr.m_pCharVal, MAX_SIZE);  //Assigning memory and copying the value
+	//Allocating a memory and then assigning the value to be copied.
+	//This way the copy and the actual value will have different memory locations
+	m_pCharVal = new char[MAX_SIZE];
+	strncpy_s(m_pCharVal, MAX_SIZE, constr.m_pCharVal, strlen(constr.m_pCharVal));  //Assigning memory and copying the value
 }
     
 void Constructor::PrintVal()
@@ -94,8 +102,17 @@ void Constructor::SetVal(int value, std::string str)
 {
 	m_intVal = value;
 	m_strVal = str;
-	strncpy(m_pCharVal, str.c_str(), MAX_SIZE);
+	strncpy_s(m_pCharVal, MAX_SIZE, str.c_str(), strlen(str.c_str()));
 }	
+
+Constructor::~Constructor()
+{
+	if (m_pCharVal != NULL) {
+		cout << "Destructing object" << endl;
+		delete m_pCharVal;
+		m_pCharVal = NULL;
+	}
+}
 
 int main()
 {
@@ -104,24 +121,28 @@ int main()
     Constructor Obj2 = Constructor();
     Constructor param(2, "Sample String");
     param.PrintVal();
+	//Calling the copy constructo using method 1 (direct initialization)
     cout << "Copy constructor Method 1 called" << endl;
     Constructor copyConst = param;
     copyConst.PrintVal();
+	//Calling the copy constructo using method 2 (passing the object as a parameter to constructor)
     cout << "Copy constructor method 2 called" << endl;
     Constructor copyConst2(param);
     copyConst2.PrintVal();
     cout << "Copy assignment operator called" << endl;
     Constructor assgConst;
-    assgConst.PrintVal();
     assgConst = param;
     assgConst.PrintVal();
     cout << "Modifying the values of param object" << endl;
     param.SetVal(10, "New String");
     cout << "Modified constructor value" << endl ;
     param.PrintVal();
+	//The modified value of m_pCharVal of the param and the copy constructor will point to the same meory location
     cout << "Copy Constructor Value" << endl;
     copyConst.PrintVal();
+	//The value of m_pCharVal of copy assignment object will be different
     cout << "Copy assignment value" << endl;
     assgConst.PrintVal();
     return 0;
+	//On destruction of the object the program should crash here
 }
