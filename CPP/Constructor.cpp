@@ -12,8 +12,9 @@ Compiled and build using Visual Studio 2022 community
 using namespace std;
 
 #define MAX_SIZE 20
-
-//H E A D E R    D E C L A R A T I O N
+//===================================================================================
+//D E C L A R A T I O N
+//===================================================================================
 
 class Constructor {
 	
