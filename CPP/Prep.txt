@@ -1,0 +1,125 @@
+============================================================================
+C++ OOPS CONCEPTS
+============================================================================
+Encapsulation:
+Encapsulation refers to the process of hiding the implementation details of an object from the user and exposing only the essential features of the object. In C++, encapsulation is achieved through the use of access specifiers - public, private, and protected. Public members are accessible to everyone, private members are accessible only within the class, and protected members are accessible within the class and its subclasses.
+
+Abstraction:
+Abstraction refers to the process of hiding the implementation details of an object and exposing only the essential features to the user. In C++, abstraction is achieved through the use of abstract classes and interfaces. An abstract class is a class that contains at least one pure virtual function, which means the function has no implementation and must be overridden by the derived class. An interface is a class that contains only pure virtual functions.
+
+Inheritance:
+Inheritance is the process of creating a new class from an existing class. The new class, called the derived class, inherits the properties of the existing class, called the base class. In C++, inheritance is achieved through the use of the class and struct keywords. The derived class can access the public and protected members of the base class.
+
+Polymorphism:
+Polymorphism refers to the ability of an object to take on multiple forms. In C++, polymorphism is achieved through the use of virtual functions and function overloading. A virtual function is a function that can be overridden by a derived class. Function overloading is the process of defining multiple functions with the same name but different parameter lists.
+
+============================================================================
+FUNCTION POINTER - CALLBACK FUNCTIONS
+============================================================================
+
+typedef int (*operation)(int, int)
+
+void callback(int a, int b, operation funcOpr) {
+	funcOpr(a, b);
+}
+
+void callback(int a, int b, int (*operation)(int, int)) {
+	operation(a, b);
+}
+
+void callback(int a, int b, std::function<int(int, int)> operation) {
+	operation(a, b);
+}
+
+============================================================================
+THREADS
+============================================================================
+
+mutable - variable can be modified even from const function or const object.
+
+mutable mutex
+
+const - thread safe ?
+
+
+
+const int* aptr = &a; = Cannot change the value pointed by aptr, but the address pointed can be modified. Can point to &b.
+int* const bptr = &b; = cannot change the pointer. Once assigned to b it cannot be changed, but the value can be modified
+
+============================================================================
+DESIGN
+============================================================================
+	-> Composition
+	-> Delegation
+	-> Aggregation
+	
+	-> S.O.L.I.D
+	
+
+Composition
++----------------+        +--------------+
+|    Car         |◆------>|    Engine    |
++----------------+        +--------------+
+
+
+Delegation
++----------------+    +--------------+
+|    Car         |--> |    Engine    |
++----------------+    +--------------+
+
+
+Inheritance:
++-----------------+
+|    Vehicle      |
++-----------------+
+        △
++-----------------+
+|      Car        |
++-----------------+
+
+============================================================================
+POINTERS
+============================================================================
+*) void pointer is a generic pointer type that can hold the address of any object or function. So a pointer of any type can be assigned to void pointer without casting.
+
+	int num =20;
+	int *intPtr = &num;
+	void *voidPtr;
+	voidPtr = intPtr;
+
+*) 
+============================================================================
+LINUX
+============================================================================
+Dynamic Shared Library
+
+In Linux, .so files are dynamic shared libraries that can be loaded by programs at runtime. They allow programs to share code and resources, making them more efficient and modular.
+
+To create a .so file from a C++ code, you need to follow these steps:
+
+Write your C++ code and save it in a file with the extension .cpp.
+
+Compile your C++ code into an object file (.o) using a compiler like g++ or clang++. The command to compile your code would look something like this:
+
+g++ -c -fPIC example.cpp -o example.o
+
+The -c option tells the compiler to generate an object file, while the -fPIC option generates position-independent code (PIC) suitable for a shared library.
+
+Link the object file into a shared library (.so) using the compiler's -shared option. The command to link the object file would look something like this:
+
+g++ -shared example.o -o libexample.so
+
+The -shared option tells the compiler to generate a shared library, while the -o option specifies the name of the output file.
+
+Install the shared library on your system by copying it to a location where it can be found by programs that use it. This typically involves copying the .so file to a directory listed in the system's library search path, such as /usr/local/lib or /usr/lib.
+Once the shared library is installed, other programs can use it by linking against it at compile-time or loading it dynamically at runtime using the dlopen function.
+
+PIC (Position Independent Code)
+
+Position Independent Code (PIC) is machine code that can be executed at any memory address without modification. It is designed to be relocatable, meaning that it can be loaded into any location in memory and still run correctly. PIC is commonly used in shared libraries and other code that needs to be loaded at different addresses each time it runs.
+
+PIC is achieved by using relative addressing instead of absolute addressing in the code. Absolute addressing refers to memory locations that are fixed and known at compile time, while relative addressing calculates the address of a memory location relative to the current program counter or instruction pointer. By using relative addressing, the code can be executed from any memory location without modification because the addresses are calculated at runtime.
+
+PIC can be implemented in several ways, including using the Global Offset Table (GOT) or Procedure Linkage Table (PLT) in conjunction with the dynamic linker/loader. The dynamic linker/loader is responsible for resolving the addresses of functions and data that are referenced by the code at runtime.
+
+PIC is important for several reasons, including improved security, as it makes it more difficult for attackers to exploit memory-related vulnerabilities. It also allows for more efficient memory usage, as multiple processes can share the same code in memory.
