@@ -78,7 +78,7 @@ Constructor::Constructor(const Constructor& constr)
 	cout << "Copy Constructor : " << endl;
 	m_intVal = constr.m_intVal;
 	m_strVal = constr.m_strVal;
-	//default copying behavior and this should cause the program to cause during object destruction.
+	//default copying behavior and this should cause the program to crash during object destruction.
 	//When the destructo is called the same memory location will be deleted twice which causes the crash
 	m_pCharVal = constr.m_pCharVal;
 }
